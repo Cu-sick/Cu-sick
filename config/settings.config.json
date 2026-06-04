@@ -1,0 +1,101 @@
+{
+  "$schema": "./settings.schema (informal)",
+  "schemaVersion": "1.0",
+
+  "paths": {
+    "_comment": "All paths may use %ENV% or be absolute. root is overridable via CLAUDE_AUTOMATION_ROOT.",
+    "root": "C:\\ClaudeAutomation",
+    "logs": "C:\\ClaudeAutomation\\logs",
+    "state": "C:\\ClaudeAutomation\\state",
+    "status": "C:\\ClaudeAutomation\\status",
+    "prompts": "C:\\ClaudeAutomation\\prompts",
+    "storageState": "C:\\ClaudeAutomation\\state\\monarch_storage_state.json"
+  },
+
+  "monarch": {
+    "_comment": "Monarch rebranded domains in 2025: web app is app.monarch.com, GraphQL is api.monarch.com/graphql. Older app.monarchmoney.com / api.monarchmoney.com still appear in some flows.",
+    "appUrl": "https://app.monarch.com",
+    "loginUrl": "https://app.monarch.com/login",
+    "dashboardUrlFragment": "/dashboard",
+    "graphqlUrl": "https://api.monarch.com/graphql",
+    "graphqlFallbackUrl": "https://api.monarchmoney.com/graphql",
+
+    "selectors": {
+      "_comment": "Monarch's DOM changes without notice. These are resilient guesses with fallbacks; VERIFY against the live page (see docs/TESTING.md > 'Refreshing selectors'). monarch-session.mjs tries each candidate in order.",
+      "emailInput": ["input[name='email']", "input[type='email']", "#email"],
+      "passwordInput": ["input[name='password']", "input[type='password']", "#password"],
+      "submitButton": ["button[type='submit']", "button:has-text('Sign in')", "button:has-text('Log in')"],
+      "mfaInput": ["input[name='totp']", "input[autocomplete='one-time-code']", "input[name='code']", "input[inputmode='numeric']"],
+      "mfaSubmit": ["button[type='submit']", "button:has-text('Verify')", "button:has-text('Continue')"],
+      "loggedInMarker": ["[data-testid='nav-sidebar']", "nav[aria-label='Primary']", "a[href*='/accounts']"]
+    }
+  },
+
+  "playwright": {
+    "engine": "node",
+    "headlessDefault": true,
+    "navigationTimeoutMs": 45000,
+    "actionTimeoutMs": 15000,
+    "slowMoMs": 0,
+    "userAgent": null,
+    "_comment": "headlessDefault is overridden to false when prepare_task.ps1 is run with -Interactive."
+  },
+
+  "credentials": {
+    "_comment": "Where prepare_task.ps1 looks for secrets. Priority: provider order below. 'env' reads MONARCH_EMAIL / MONARCH_PASSWORD / MONARCH_MFA_SECRET / MONARCH_TOKEN.",
+    "providerOrder": ["CredentialManager", "Environment"],
+    "credentialManagerTarget": "ClaudeAutomation/Monarch",
+    "tokenCredentialManagerTarget": "ClaudeAutomation/MonarchToken"
+  },
+
+  "session": {
+    "_comment": "How long a successful validation is trusted before forcing a full browser re-check. Token fast-path is always attempted.",
+    "trustWindowMinutes": 60,
+    "forceBrowserValidate": false
+  },
+
+  "notifications": {
+    "_comment": "Any combination may be enabled. Failures always notify if at least one channel is enabled. Set 'notifyOnSuccess' true for heartbeat confirmations.",
+    "notifyOnSuccess": false,
+    "notifyOnFailure": true,
+    "toast": {
+      "enabled": true,
+      "appId": "Claude.Automation"
+    },
+    "slack": {
+      "enabled": false,
+      "webhookEnvVar": "CLAUDE_AUTOMATION_SLACK_WEBHOOK"
+    },
+    "teams": {
+      "enabled": false,
+      "webhookEnvVar": "CLAUDE_AUTOMATION_TEAMS_WEBHOOK"
+    },
+    "email": {
+      "enabled": false,
+      "smtpServer": "smtp.gmail.com",
+      "smtpPort": 587,
+      "useSsl": true,
+      "from": "tmcusick25@gmail.com",
+      "to": "tmcusick25@gmail.com",
+      "credentialManagerTarget": "ClaudeAutomation/SmtpAppPassword"
+    }
+  },
+
+  "cowork": {
+    "_comment": "How Launch-ClaudeCowork.ps1 starts Cowork. See docs/COWORK_INTEGRATION.md. exePathCandidates are tried in order; first existing wins. promptDelivery describes how the main prompt reaches Cowork.",
+    "exePathCandidates": [
+      "%LOCALAPPDATA%\\Programs\\Claude\\Claude.exe",
+      "%LOCALAPPDATA%\\AnthropicClaude\\Claude.exe",
+      "%PROGRAMFILES%\\Claude\\Claude.exe"
+    ],
+    "promptDelivery": "file",
+    "promptDropDir": "C:\\ClaudeAutomation\\status\\prompts-outbox",
+    "launchArgs": []
+  },
+
+  "logging": {
+    "level": "Info",
+    "retentionDays": 30,
+    "perTaskFile": false
+  }
+}

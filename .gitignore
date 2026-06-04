@@ -1,0 +1,30 @@
+# ─── Secrets & session state (NEVER COMMIT) ──────────────────────────────
+# Credentials live in Windows Credential Manager, not in the repo.
+secrets/
+*.secret
+*.token
+*.pfx
+
+# Playwright session/storage state contains live auth cookies + tokens.
+state/
+*storage_state*.json
+*.mm/
+
+# Runtime status & logs (machine-local artifacts)
+logs/
+*.log
+status/
+task_status*.json
+
+# ─── Node / Playwright ───────────────────────────────────────────────────
+node_modules/
+package-lock.json
+.playwright/
+playwright-report/
+
+# ─── OS / editor noise ───────────────────────────────────────────────────
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/

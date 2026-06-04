@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0",
+  "_comment": "The 4 scheduled tasks. 'name' is the stable key passed as -TaskName. 'schedule' is consumed by tools/Register-ScheduledTasks.ps1. All tasks share the same Monarch session-assurance prep; they differ only in the Cowork prompt they launch.",
+
+  "tasks": [
+    {
+      "name": "Paycheck",
+      "displayName": "Paycheck Updater",
+      "enabled": true,
+      "promptFile": "prompts/paycheck_updater.md",
+      "requiresMonarchSession": true,
+      "schedule": {
+        "frequency": "Weekly",
+        "daysOfWeek": ["Friday"],
+        "atTime": "07:00",
+        "_comment": "Run after payday posts. Adjust day/time to your pay cycle."
+      },
+      "notes": "Updates expected/actual paycheck amounts and recurring income in Monarch."
+    },
+    {
+      "name": "R1Transfer",
+      "displayName": "R1 Transfer Calculator",
+      "enabled": true,
+      "promptFile": "prompts/r1_transfer_calculator.md",
+      "requiresMonarchSession": true,
+      "schedule": {
+        "frequency": "Weekly",
+        "daysOfWeek": ["Friday"],
+        "atTime": "07:30",
+        "_comment": "Runs shortly after Paycheck so balances reflect the new deposit."
+      },
+      "notes": "Reads current balances and computes the recommended transfer amount(s) for the R1 account."
+    },
+    {
+      "name": "TelegramCommission",
+      "displayName": "Telegram Commission Updater",
+      "enabled": true,
+      "promptFile": "prompts/telegram_commission_updater.md",
+      "requiresMonarchSession": true,
+      "schedule": {
+        "frequency": "Daily",
+        "atTime": "08:00",
+        "_comment": "Daily because commission messages arrive throughout the week."
+      },
+      "notes": "Pulls commission figures (from Telegram) and records them in Monarch."
+    },
+    {
+      "name": "StudentLoan",
+      "displayName": "Student Loan Balance Updater",
+      "enabled": true,
+      "promptFile": "prompts/student_loan_balance_updater.md",
+      "requiresMonarchSession": true,
+      "schedule": {
+        "frequency": "Weekly",
+        "daysOfWeek": ["Monday"],
+        "atTime": "07:00",
+        "_comment": "Weekly balance reconciliation for the student loan account."
+      },
+      "notes": "Updates the manual student loan balance in Monarch to match the servicer."
+    }
+  ]
+}
