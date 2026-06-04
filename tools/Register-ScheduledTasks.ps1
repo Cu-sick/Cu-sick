@@ -31,8 +31,8 @@ Import-Module "$([IO.Path]::Combine((Split-Path -Parent $PSScriptRoot),'scripts'
 $root      = Get-AutomationRoot
 $cfg       = Get-TasksConfig
 $launcher  = Join-Path $root 'scripts\Launch-ClaudeCowork.ps1'
-$pwsh      = (Get-Command pwsh -ErrorAction SilentlyContinue)?.Source
-if (-not $pwsh) { $pwsh = (Get-Command powershell).Source }  # fall back to Windows PowerShell
+$pwshCmd   = Get-Command pwsh -ErrorAction SilentlyContinue
+$pwsh      = if ($pwshCmd) { $pwshCmd.Source } else { (Get-Command powershell).Source }  # fall back to Windows PowerShell
 
 foreach ($task in $cfg.tasks) {
     $taskName = "ClaudeCowork-$($task.name)"

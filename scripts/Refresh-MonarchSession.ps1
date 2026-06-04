@@ -132,8 +132,9 @@ function Invoke-MonarchSessionRefresh {
                   Detail = 'Existing storageState validated and refreshed.' }
     }
 
+    $reason = if ($r.error) { $r.error } else { 'unknown' }
     return @{ Ok = $false; State = 'stale-failed'; Method = 'playwright-reauth'; WasStale = $true
-              Detail = ("Session refresh failed: {0}" -f ($r.error ?? 'unknown')) }
+              Detail = ("Session refresh failed: {0}" -f $reason) }
 }
 
 # If run directly (not dot-sourced), execute and print a result.

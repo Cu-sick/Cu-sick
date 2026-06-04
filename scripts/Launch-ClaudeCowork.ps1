@@ -72,7 +72,9 @@ $header = @"
 
 "@
 $promptBody = Get-Content -Raw -LiteralPath $promptPath
-$resolved = $header + ($promptBody -replace '\{\{STATUS_FILE\}\}', [regex]::Escape($statusPath))
+# Literal String.Replace (not -replace): the status path is a Windows path with
+# backslashes, which a regex replacement string would mangle.
+$resolved = $header + $promptBody.Replace('{{STATUS_FILE}}', $statusPath)
 
 $delivery = $settings.cowork.promptDelivery
 switch ($delivery) {

@@ -13,6 +13,10 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+# Module-level cache state. Initialized here so StrictMode-safe reads never hit
+# an "uninitialized variable" error before the first assignment.
+$script:__settings = $null
+
 # ──────────────────────────────────────────────────────────────────────────
 # Root / configuration resolution
 # ──────────────────────────────────────────────────────────────────────────
