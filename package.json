@@ -1,0 +1,15 @@
+{
+  "name": "claude-cowork-monarch-session-assurance",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monarch Money session-assurance helper for scheduled Claude Cowork tasks on Windows.",
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/monarch-session.mjs validate",
+    "refresh": "node scripts/monarch-session.mjs refresh",
+    "postinstall-browsers": "playwright install chromium"
+  },
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}
